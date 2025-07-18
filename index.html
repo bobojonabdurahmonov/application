@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>Ro'yxatdan o'tish</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div style="display: flex; flex-direction: column;">
+        <label>Ismingizni kiriting:</label>
+        <input type="text" id="nameInput" placeholder="Ismingizni yozing">    
+        <label>Familiyangizni kiriting:</label>
+        <input type="text" id="familiya" placeholder="Familiyangizni yozing">
+        <label>Emailingizni kiriting:</label>
+        <input type="text" id="email" placeholder="Emailingizni yozing">
+        <label>Parolingizni yozing:</label>
+        <input type="text" id="password" placeholder="Parolingizni yozing">
+        <button onclick="sendName()" style="background-color: rgb(42, 123, 216);">Yuborish</button>
+    </div>
+    
+    
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        const tg = window.Telegram.WebApp;
+        
+        tg.ready();
+        tg.expand();
+    
+        function sendName() {
+            const name = document.getElementById("nameInput").value.trim();
+            const lastname = document.getElementById('familiya').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const parol = document.getElementById('password').value.trim();
+
+            if (name.length < 2 || name.length > 50 || lastname.length < 2 || lastname.length > 50) {
+                alert("Ism 2 dan 50 gacha belgi bo'lishi kerak!");
+                return;
+            }
+
+            const belgilar = ["!", "%", "*", "$"];
+            for (let belgi of belgilar) {
+                if (email.includes(belgi)) {
+                    alert("Emailga to'g'ri belgi kiriting!");
+                    return;
+                }
+            }
+
+            if (parol.length !== 8) {
+                alert('Parol faqat 8 ta belgidan iborat bo‘lishi kerak!');
+                return;
+            }
+
+            const data = {
+                name: name,
+                lastname: lastname,
+                email: email,
+                parol: parol
+            };
+
+            tg.sendData(JSON.stringify(data)); // Faqat 1 marta, JSON formatda
+            tg.close();
+        }
+    </script>
+
+</body>
+</html>
